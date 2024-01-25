@@ -1,0 +1,27 @@
+// Binding cpython/include/pytypedef.h
+// note many comments are directly coppied from the source material.
+// this is done for clarity
+
+public typedef py_ssize_t = size_t; // this is supposed to be signed... but we don't have ssize_t yet. This is a placeholder.
+
+// from object.h
+// ---------------
+
+// not sure if BCL supports opaque types. This might be good to keep opaque tho (if I can't find the definition)
+public struct PyTypeObject {}
+
+// this feels like it should just be a typedef? but what do I know about how python works?
+public struct _PyMutex {
+  v: u8;
+}
+
+// src-lines: 214-222
+public struct PyObject {
+  public ob_tid: &u32, // thread id (or zero)
+  _padding: u16,
+  public ob_mutex: _PyMutex, // per object lock
+  public ob_gc_bits: u8, // gc related state
+  public ob_ref_locals: u32, // local reference count
+  public ob_ref_shared: py_ssize_t, // shared (atomic) reference count
+  public ob_type: &PyTypeObject;
+}
